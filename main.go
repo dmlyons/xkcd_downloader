@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -21,21 +22,21 @@ func main() {
 		log.Fatal("Unable to get current user: ", err)
 	}
 
-	cfgDBFileName := u.HomeDir + `/.xkcd_downloader.db`
-
-	imgDir := u.HomeDir + `/Pictures/xkcd`
+	cfgDBFileName := flag.String("db", u.HomeDir+`/.xkcd_downloader.db`, "Where the local info is stored like what has been pulled from the api.")
+	imgDir := flag.String("imgdir", u.HomeDir+`/Pictures/xkcd`, "Where the comic images are saved to")
+	flag.Parse()
 
 	// create the directory if necessary
-	err = os.MkdirAll(imgDir, os.ModePerm)
+	err = os.MkdirAll(*imgDir, os.ModePerm)
 	if err != nil {
-		log.Fatalf(`Unable to create directory %s: %v`, imgDir, err)
+		log.Fatalf(`Unable to create directory %s: %v`, *imgDir, err)
 	}
 
-	conn, err := NewDB(cfgDBFileName)
+	conn, err := NewDB(*cfgDBFileName)
 	if err != nil {
 		log.Fatalf("NewDB failed: %v", err)
 	}
-	log.Printf(`DB: %s Local Directory: %s`, cfgDBFileName, imgDir)
+	log.Printf(`DB: %s Local Directory: %s`, *cfgDBFileName, *imgDir)
 
 	client := xkcd.NewClient()
 
@@ -66,7 +67,7 @@ func main() {
 			_, err = conn.Exec(`insert into comics(id, imageURL) values (?,?)`, id, imageURL)
 		}
 		// check if file exists, download if necessary
-		localFilename := imgDir + `/` + path.Base(imageURL)
+		localFilename := *imgDir + `/` + path.Base(imageURL)
 		if fileExists(localFilename) {
 			continue
 		}
@@ -80,7 +81,7 @@ func main() {
 }
 
 func download(url, local string) error {
-	resp, err := http.Get("http://cnn.com")
+	resp, err := http.Get(url)
 	if err != nil {
 		return err
 	}
@@ -93,7 +94,7 @@ func download(url, local string) error {
 
 	err = ioutil.WriteFile(local, fileBytes, os.ModePerm)
 
-	return nil
+	return err
 }
 
 func fileExists(filename string) bool {
