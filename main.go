@@ -35,6 +35,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("NewDB failed: %v", err)
 	}
+	log.Printf(`DB: %s Local Directory: %s`, cfgDBFileName, imgDir)
 
 	client := xkcd.NewClient()
 
@@ -66,7 +67,15 @@ func main() {
 		}
 		// check if file exists, download if necessary
 		localFilename := imgDir + `/` + path.Base(imageURL)
-		fmt.Printf("%s - %+v\n", localFilename, imageURL)
+		if fileExists(localFilename) {
+			continue
+		}
+		log.Printf("Downloading %d. %s to %s\n", id, imageURL, localFilename)
+		err = download(imageURL, localFilename)
+		if err != nil {
+			log.Printf(`Unable to download %d. %s to %s`, id, imageURL, localFilename)
+		}
+
 	}
 }
 
