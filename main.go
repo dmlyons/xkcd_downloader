@@ -16,14 +16,17 @@ import (
 	"golang.org/x/xerrors"
 )
 
+// Windows and unix don't agree on path separators
+const sep = string(os.PathSeparator)
+
 func main() {
 	u, err := user.Current()
 	if err != nil {
 		log.Fatal("Unable to get current user: ", err)
 	}
 
-	cfgDBFileName := flag.String("db", u.HomeDir+`/.xkcd_downloader.db`, "Where the local info is stored like what has been pulled from the api.")
-	imgDir := flag.String("imgdir", u.HomeDir+`/Pictures/xkcd`, "Where the comic images are saved to")
+	cfgDBFileName := flag.String("db", u.HomeDir+sep+`.xkcd_downloader.db`, "Where the local info is stored like what has been pulled from the api.")
+	imgDir := flag.String("imgdir", u.HomeDir+sep+`Pictures`+sep+`xkcd`, "Where the comic images are saved to")
 	flag.Parse()
 
 	// create the directory if necessary
