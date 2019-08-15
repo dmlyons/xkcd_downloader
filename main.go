@@ -68,6 +68,9 @@ func main() {
 			}
 			imageURL = c.ImageURL
 			_, err = conn.Exec(`insert into comics(id, imageURL) values (?,?)`, id, imageURL)
+			if err != nil {
+				log.Fatalf(`conn.Exec err %v`, err)
+			}
 		}
 		// check if file exists, download if necessary
 		localFilename := *imgDir + `/` + path.Base(imageURL)
@@ -108,11 +111,8 @@ func fileExists(filename string) bool {
 	return !info.IsDir()
 }
 
-type db struct {
-	*sql.DB
-}
-
-func NewDB(filename string) (*db, error) {
+// NewDB returns an instantiated sqlite database
+func NewDB(filename string) (*sql.DB, error) {
 	conn, err := sql.Open("sqlite3", filename)
 	if err != nil {
 		return nil, xerrors.Errorf(`Failed to open db "%s":  %v`, filename, err)
@@ -130,5 +130,5 @@ func NewDB(filename string) (*db, error) {
 		return nil, xerrors.Errorf(`db.Exec failed: %v`, err)
 	}
 
-	return &db{DB: conn}, nil
+	return conn, nil
 }
