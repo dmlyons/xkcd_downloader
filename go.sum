@@ -2,5 +2,3 @@ github.com/mattn/go-sqlite3 v1.11.0 h1:LDdKkqtYlom37fkvqs8rMPFKAMe8+SgjbwZ6ex1/A
 github.com/mattn/go-sqlite3 v1.11.0/go.mod h1:FPy6KqzDD04eiIsT53CuJW3U88zkxoIYsOqkbpncsNc=
 github.com/nishanths/go-xkcd v0.0.0-20160531092901-9497d909de39 h1:hD/Ob1zaeDAw1hxc2ne34CVJaZIelKMOmaJB/wGDujo=
 github.com/nishanths/go-xkcd v0.0.0-20160531092901-9497d909de39/go.mod h1:R7jhXmaqF0tVqZCC6SR+1nhmS2RvzF7oQF96fZXDAXQ=
-golang.org/x/xerrors v0.0.0-20190717185122-a985d3407aa7 h1:9zdDQZ7Thm29KFXgAX/+yaf3eVbP7djjWp/dXAppNCc=
-golang.org/x/xerrors v0.0.0-20190717185122-a985d3407aa7/go.mod h1:I/5z698sn9Ka8TeJc9MKroUUfqBBauWjQqLJ2OPfmY0=

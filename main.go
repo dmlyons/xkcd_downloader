@@ -13,7 +13,6 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 	xkcd "github.com/nishanths/go-xkcd"
-	"golang.org/x/xerrors"
 )
 
 // Windows and unix don't agree on path separators
@@ -115,7 +114,7 @@ func fileExists(filename string) bool {
 func NewDB(filename string) (*sql.DB, error) {
 	conn, err := sql.Open("sqlite3", filename)
 	if err != nil {
-		return nil, xerrors.Errorf(`Failed to open db "%s":  %v`, filename, err)
+		return nil, fmt.Errorf(`Failed to open db "%s":  %v`, filename, err)
 	}
 
 	// init the tables if they aren't there already
@@ -127,7 +126,7 @@ func NewDB(filename string) (*sql.DB, error) {
 	_, err = conn.Exec(sqlStmt)
 	if err != nil {
 		log.Printf("%q: %s\n", err, sqlStmt)
-		return nil, xerrors.Errorf(`db.Exec failed: %v`, err)
+		return nil, fmt.Errorf(`db.Exec failed: %v`, err)
 	}
 
 	return conn, nil
