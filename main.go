@@ -114,7 +114,7 @@ func fileExists(filename string) bool {
 func NewDB(filename string) (*sql.DB, error) {
 	conn, err := sql.Open("sqlite3", filename)
 	if err != nil {
-		return nil, fmt.Errorf(`Failed to open db "%s":  %v`, filename, err)
+		return nil, fmt.Errorf(`failed to open db "%s":  %v`, filename, err)
 	}
 
 	// init the tables if they aren't there already
